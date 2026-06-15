@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CANDID Score – Circadian And Nocturnal Disruption Index for Diabetes</title>
+<style>
+:root { --primary-blue: #1F4E79; --risk-green: #2E7D32; --risk-yellow: #F57C00; --risk-red: #C62828; --border-gray: #ddd; --bg-light: #f8f9fa; }
+body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f0f4f8; color: #333; }
+.header { background: linear-gradient(135deg, #1F4E79, #2a6099); color: white; padding: 1.5rem 1rem 1rem; text-align: center; position: relative; }
+.header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+.subtitle { margin: 0.3rem 0 0; font-size: 0.85rem; opacity: 0.9; }
+.lang-toggle { position: absolute; top: 1.2rem; right: 1.5rem; display: flex; border-radius: 6px; overflow: hidden; border: 2px solid rgba(255,255,255,0.6); }
+.lang-btn { padding: 0.4rem 0.9rem; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; background: transparent; color: rgba(255,255,255,0.7); }
+.lang-btn.active { background: var(--primary-blue); color: white; }
+.lang-btn:hover:not(.active) { background: rgba(255,255,255,0.15); color: white; }
+.nav { background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+.nav-list { display: flex; justify-content: center; list-style: none; max-width: 900px; margin: 0 auto; padding: 0; }
+.nav-item { padding: 1rem 1.5rem; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; font-weight: 500; font-size: 0.92rem; }
+.nav-item:hover { background-color: #f5f5f5; }
+.nav-item.active { border-bottom-color: var(--primary-blue); color: var(--primary-blue); }
+.main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+.page { display: none; }
+.page.active { display: block; }
+.card { background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 1.5rem; }
+.card-title { color: var(--primary-blue); font-size: 1.3rem; margin: 0 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e0e8f0; }
+.step-container { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 1.5rem 0; }
+.step { display: flex; align-items: center; gap: 0.5rem; }
+.step-number { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--primary-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; color: var(--primary-blue); background: white; }
+.step.active .step-number { background: var(--primary-blue); color: white; }
+.step.completed .step-number { background: var(--primary-blue); color: white; }
+.step-label { font-size: 0.88rem; color: #666; }
+.step.active .step-label { color: var(--primary-blue); font-weight: 600; }
+.step-content { display: none; }
+.step-content.active { display: block; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1rem 0; }
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.92rem; }
+.form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1.5px solid var(--border-gray); border-radius: 6px; font-size: 0.95rem; box-sizing: border-box; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(31,78,121,0.1); }
+.unit-row { display: flex; gap: 0.5rem; align-items: center; }
+.unit-row input { flex: 1; }
+.unit-row select { width: 90px; flex-shrink: 0; }
+.unit-hint { font-size: 0.8rem; color: #888; margin-top: 0.2rem; }
+.unit-select { padding: 0.6rem; border: 1.5px solid var(--border-gray); border-radius: 6px; font-size: 0.9rem; background: white; }
+.btn { padding: 0.7rem 1.8rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.2s; }
+.btn-primary { background: var(--primary-blue); color: white; }
+.btn-primary:hover { background: #163f66; }
+.btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+.btn-secondary { background: #e0e8f0; color: var(--primary-blue); }
+.btn-secondary:hover { background: #c8d8e8; }
+.btn-block { width: 100%; }
+.warning-box { background: #fff3cd; border-left: 4px solid #f0a000; padding: 0.8rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.88rem; margin: 0.5rem 0; }
+.warning-box strong { color: #8a6000; }
+.highlight-box { background: #f0f4f8; border-left: 4px solid var(--primary-blue); padding: 1rem; border-radius: 0 6px 6px 0; margin: 0.5rem 0; }
+.info-box { background: #e8f4fd; border-left: 4px solid var(--primary-blue); padding: 0.8rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.9rem; }
+.data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+.data-table th, .data-table td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border-gray); }
+.data-table th { background: #f0f4f8; font-weight: 700; color: var(--primary-blue); }
+.data-table tr:hover { background: #f8fbff; }
+.stat-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 0.8rem 0; }
+.stat-item { flex: 1; min-width: 120px; text-align: center; padding: 0.8rem; border-radius: 8px; background: #f0f4f8; border-top: 3px solid var(--primary-blue); }
+.stat-value { font-size: 1.6rem; font-weight: 800; color: var(--primary-blue); }
+.stat-label { font-size: 0.78rem; color: #555; margin-top: 0.3rem; }
+.score-display { font-size: 2.5rem; font-weight: 800; color: var(--primary-blue); }
+.score-label { font-size: 0.82rem; color: #888; margin: 0; }
+.risk-badge { display: inline-block; padding: 0.4rem 1.2rem; border-radius: 20px; font-weight: 700; font-size: 1rem; }
+.risk-badge.low { background: #e8f5e9; color: var(--risk-green); border: 2px solid var(--risk-green); }
+.risk-badge.medium { background: #fff3e0; color: var(--risk-yellow); border: 2px solid var(--risk-yellow); }
+.risk-badge.high { background: #ffebee; color: var(--risk-red); border: 2px solid var(--risk-red); }
+.reference-item { padding: 1rem; border-left: 3px solid var(--primary-blue); background-color: #f8f9fa; margin-bottom: 1rem; border-radius: 0 6px 6px 0; }
+.reference-item strong { display: block; margin-bottom: 0.3rem; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto; }
+.modal.show { display: flex; align-items: flex-start; justify-content: center; padding: 2rem; }
+.modal-content { background: white; border-radius: 10px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; margin-top: 2rem; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-gray); background: #f0f4f8; border-radius: 10px 10px 0 0; }
+.modal-header h3 { margin: 0; color: var(--primary-blue); }
+.modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #888; padding: 0 0.5rem; }
+.modal-body { padding: 1.5rem; }
+.question-item { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-gray); }
+.question-text { font-weight: 600; margin-bottom: 0.5rem; font-size: 0.92rem; }
+.question-options { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.option-label { display: flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.7rem; background: #f0f4f8; border-radius: 6px; border: 1.5px solid var(--border-gray); cursor: pointer; font-size: 0.88rem; transition: all 0.15s; }
+.option-label:has(input:checked) { background: #e3f2fd; border-color: var(--primary-blue); color: var(--primary-blue); }
+.option-label input { cursor: pointer; }
+.option-label:hover { border-color: var(--primary-blue); }
+.footer { background: #1F4E79; color: rgba(255,255,255,0.8); text-align: center; padding: 2rem 1rem; margin-top: 2rem; font-size: 0.88rem; }
+.footer strong { color: white; }
+.error-msg { color: var(--risk-red); font-size: 0.82rem; margin-top: 0.2rem; display: none; }
+input.error, select.error { border-color: var(--risk-red) !important; }
+.field-error { border: 2px solid var(--risk-red); border-radius: 6px; padding: 0.4rem 0.6rem; margin-top: 0.3rem; font-size: 0.82rem; color: var(--risk-red); display: none; }
+.med-group { background: #f0f7ff; border-radius: 6px; padding: 0.6rem 0.8rem; border-left: 3px solid #90b8d8; display: flex; flex-direction: column; justify-content: center; }
+.med-group > label { color: #4a6a80; font-size: 0.88rem; font-weight: 500; margin-bottom: 0.4rem; }
+</style>
+</head>
+<body>
+<header class="header">
+    <h1>CANDID Score</h1>
+    <p class="subtitle">Circadian And Nocturnal Disruption Index for Diabetes</p>
+    <p class="subtitle" style="font-size:0.78rem; opacity:0.8;" class="t" data-en="Intended for adults aged 18 and above" data-zh="适用于18岁及以上成年人">Intended for adults aged 18 and above</p>
+    <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">En</button>
+        <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中</button>
+    </div>
+</header>
+<nav class="nav">
+    <ul class="nav-list">
+        <li class="nav-item active" data-page="calculator"><span class="t" data-en="Calculator" data-zh="计算器">Calculator</span></li>
+        <li class="nav-item" data-page="circs"><span class="t" data-en="CircS Overview" data-zh="昼夜节律综合征">CircS Overview</span></li>
+        <li class="nav-item" data-page="model"><span class="t" data-en="Model Details" data-zh="模型详情">Model Details</span></li>
+        <li class="nav-item" data-page="references"><span class="t" data-en="References" data-zh="参考文献">References</span></li>
+    </ul>
+</nav>
+<main class="main">
+<!-- ==================== Calculator Page ==================== -->
+<div id="calculator" class="page active">
+    <div class="card">
+        <h2 class="card-title t" data-en="CANDID Score Calculator" data-zh="CANDID Score 计算器">CANDID Score Calculator</h2>
+        <!-- Step indicators -->
+        <div class="step-container">
+            <div class="step active" id="step1-indicator">
+                <div class="step-number">1</div>
+                <span class="step-label t" data-en="Population" data-zh="人群选择">Population</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step2-indicator">
+                <div class="step-number">2</div>
+                <span class="step-label t" data-en="Indicators" data-zh="指标输入">Indicators</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step3-indicator">
+                <div class="step-number">3</div>
+                <span class="step-label t" data-en="Result" data-zh="结果">Result</span>
+            </div>
+        </div>
+        <!-- Step 1 -->
+        <div class="step-content active" id="step1">
+            <h3 style="color:var(--primary-blue); margin-top:0;" class="t" data-en="Step 1: Select Population &amp; Gender" data-zh="第1步：选择人群与性别">Step 1: Select Population &amp; Gender</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label><span class="t" data-en="Population" data-zh="人群">Population</span></label>
+                    <select id="population" onchange="updatePopulationSettings()">
+                        <option value="" class="t" data-en="-- Please select --" data-zh="-- 请选择 --">-- Please select --</option>
+                        <option value="asian" class="t" data-en="Asian" data-zh="亚裔">Asian</option>
+                        <option value="caucasian" class="t" data-en="Caucasian" data-zh="白种人">Caucasian</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><span class="t" data-en="Gender" data-zh="性别">Gender</span></label>
+                    <select id="gender" onchange="updateGenderSettings()">
+                        <option value="" class="t" data-en="-- Please select --" data-zh="-- 请选择 --">-- Please select --</option>
+                        <option value="male" class="t" data-en="Male" data-zh="男性">Male</option>
+                        <option value="female" class="t" data-en="Female" data-zh="女性">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div id="step1-error" style="color:var(--risk-red); font-size:0.85rem; text-align:center; display:none; margin-top:0.5rem;"></div>
+            <div style="text-align:center; margin-top:1.5rem;">
+                <button class="btn btn-primary" id="nextBtn1" onclick="tryGoToStep2()">
+                    <span class="t" data-en="Next Step →" data-zh="下一步 →">Next Step →</span>
+                </button>
+            </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="step-content" id="step2">
+            <h3 style="color:var(--primary-blue); margin-top:0;" class="t" data-en="Step 2: Enter Indicators" data-zh="第2步：输入指标">Step 2: Enter Indicators</h3>
+            <div id="validation-errors" class="error-msg" style="background:#ffebee; border:2px solid var(--risk-red); border-radius:6px; padding:0.8rem; margin-bottom:1rem; display:none;">
+                <strong data-en="Please complete all fields before calculating:" data-zh="请先完成所有字段填写后再计算：">Please complete all fields before calculating:</strong>
+                <ul id="error-list" style="margin:0.3rem 0 0 1.2rem; color:var(--risk-red);"></ul>
+            </div>
+            <div class="form-grid">
+                <!-- Blood Glucose -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Fasting Blood Glucose (FBG)" data-zh="空腹血糖（FBG）">Fasting Blood Glucose (FBG)</span></label>
+                    <div class="unit-row">
+                        <input type="number" id="fbg" step="0.1" oninput="handleUnitChange('fbg')" onblur="checkFieldRange('fbg')">
+                        <select id="fbg-unit" class="unit-select" onchange="handleUnitChange('fbg')">
+                            <option value="mmol">mmol/L</option>
+                            <option value="mgdl">mg/dL</option>
+                        </select>
+                    </div>
+                    <div id="fbg-error" class="error-msg"></div>
+                </div>
+                <!-- Diabetes Medication -->
+                <div class="form-group med-group">
+                    <label><span class="t" data-en="Antidiabetic Medication" data-zh="是否服用降糖药">Antidiabetic Medication</span></label>
+                    <select id="diabetes-med">
+                        <option value="no" class="t" data-en="No" data-zh="否">No</option>
+                        <option value="yes" class="t" data-en="Yes" data-zh="是">Yes</option>
+                    </select>
+                </div>
+                <!-- Triglycerides -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Triglycerides (TG)" data-zh="甘油三酯（TG）">Triglycerides (TG)</span></label>
+                    <div class="unit-row">
+                        <input type="number" id="tg" step="1" oninput="handleUnitChange('tg')" onblur="checkFieldRange('tg')">
+                        <select id="tg-unit" class="unit-select" onchange="handleUnitChange('tg')">
+                            <option value="mmol">mmol/L</option>
+                            <option value="mgdl">mg/dL</option>
+                        </select>
+                    </div>
+                    <div id="tg-error" class="error-msg"></div>
+                </div>
+                <!-- HDL -->
+                <div class="form-group">
+                    <label><span class="t" data-en="HDL Cholesterol" data-zh="HDL-C">HDL Cholesterol</span></label>
+                    <div class="unit-row">
+                        <input type="number" id="hdl" step="1" oninput="handleUnitChange('hdl')" onblur="checkFieldRange('hdl')">
+                        <select id="hdl-unit" class="unit-select" onchange="handleUnitChange('hdl')">
+                            <option value="mmol">mmol/L</option>
+                            <option value="mgdl">mg/dL</option>
+                        </select>
+                    </div>
+                    <div id="hdl-error" class="error-msg"></div>
+                </div>
+                <!-- Lipid-lowering Medication -->
+                <div class="form-group med-group">
+                    <label><span class="t" data-en="Lipid-Lowering Medication" data-zh="是否服用降脂药">Lipid-Lowering Medication</span></label>
+                    <div class="unit-hint t" style="margin-bottom:0.4rem;" data-en="Applies to TG &amp; HDL components" data-zh="适用于甘油三酯与HDL成分判定">Applies to TG &amp; HDL components</div>
+                    <select id="lipid-med">
+                        <option value="no" class="t" data-en="No" data-zh="否">No</option>
+                        <option value="yes" class="t" data-en="Yes" data-zh="是">Yes</option>
+                    </select>
+                </div>
+                <!-- Waist Circumference -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Waist Circumference" data-zh="腰围">Waist Circumference</span></label>
+                    <div class="unit-row">
+                        <input type="number" id="wc" step="0.5" oninput="handleUnitChange('wc')" onblur="checkFieldRange('wc')">
+                        <select id="wc-unit" class="unit-select" onchange="handleUnitChange('wc')">
+                            <option value="cm">cm</option>
+                            <option value="in">in</option>
+                        </select>
+                    </div>
+                    <div id="wc-error" class="error-msg"></div>
+                </div>
+                <!-- SBP -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Blood Pressure — Systolic (SBP)" data-zh="血压 — 收缩压（SBP）">Blood Pressure — Systolic (SBP)</span></label>
+                    <div class="unit-row">
+                        <input type="number" id="sbp" step="1" oninput="handleUnitChange('sbp')" onblur="checkFieldRange('sbp')">
+                        <select id="sbp-unit" class="unit-select" onchange="handleUnitChange('sbp')">
+                            <option value="mmhg">mmHg</option>
+                            <option value="kpa">kPa</option>
+                        </select>
+                    </div>
+                    <div id="sbp-error" class="error-msg"></div>
+                </div>
+                <!-- DBP -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Blood Pressure — Diastolic (DBP)" data-zh="血压 — 舒张压（DBP）">Blood Pressure — Diastolic (DBP)</span></label>
+                    <div class="unit-row">
+                        <input type="number" id="dbp" step="1" oninput="handleUnitChange('dbp')" onblur="checkFieldRange('dbp')">
+                        <select id="dbp-unit" class="unit-select" onchange="handleUnitChange('dbp')">
+                            <option value="mmhg">mmHg</option>
+                            <option value="kpa">kPa</option>
+                        </select>
+                    </div>
+                    <div id="dbp-error" class="error-msg"></div>
+                </div>
+                <!-- Antihypertensive Medication -->
+                <div class="form-group med-group">
+                    <label><span class="t" data-en="Antihypertensive Medication" data-zh="是否服用降压药">Antihypertensive Medication</span></label>
+                    <select id="antihypertensive-med">
+                        <option value="no" class="t" data-en="No" data-zh="否">No</option>
+                        <option value="yes" class="t" data-en="Yes" data-zh="是">Yes</option>
+                    </select>
+                </div>
+                <!-- Sleep -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Average Sleep Duration per Night" data-zh="平均每晚睡眠时长">Average Sleep Duration per Night</span></label>
+                    <select id="sleep">
+                        <option value="" class="t" data-en="-- Please select --" data-zh="-- 请选择 --">-- Please select --</option>
+                        <option value="5">≤5 hours</option>
+                        <option value="6">6 hours</option>
+                        <option value="7">7 hours</option>
+                        <option value="8">8 hours</option>
+                        <option value="9">9 hours</option>
+                        <option value="10">≥10 hours</option>
+                    </select>
+                    <div id="sleep-error" class="error-msg"></div>
+                </div>
+                <!-- Depression -->
+                <div class="form-group">
+                    <label><span class="t" data-en="Depression Screening" data-zh="抑郁筛查">Depression Screening</span></label>
+                    <div id="depression-hint" class="unit-hint" style="color:var(--primary-blue); margin-bottom:0.5rem;"></div>
+                    <button class="btn btn-secondary btn-block" onclick="openDepressionQuestionnaire()" style="margin-top:0.3rem;">
+                        <span id="depression-btn-text" class="t" data-en="Fill PHQ-9 Questionnaire" data-zh="填写 PHQ-9 量表">Fill PHQ-9 Questionnaire</span>
+                    </button>
+                    <div id="dep-error" class="error-msg"></div>
+                </div>
+            </div>
+            <div style="display:flex; gap:1rem; justify-content:center; margin-top:1.5rem; flex-wrap:wrap;">
+                <button class="btn btn-secondary" onclick="goToStep(1)">
+                    <span class="t" data-en="← Back" data-zh="← 返回">← Back</span>
+                </button>
+                <button class="btn btn-primary" onclick="calculateScore()">
+                    <span class="t" data-en="Calculate Score →" data-zh="计算得分 →">Calculate Score →</span>
+                </button>
+            </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="step-content" id="step3">
+            <h3 style="color:var(--primary-blue); margin-top:0;" class="t" data-en="Your CANDID Score Results" data-zh="您的 CANDID Score 结果">Your CANDID Score Results</h3>
+            <div style="text-align:center;">
+                <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; margin:1rem 0;">
+                    <div>
+                        <p class="score-label t" data-en="Weighted Score" data-zh="加权分数">Weighted Score</p>
+                        <p class="score-display" id="weighted-score">--</p>
+                    </div>
+                    <div>
+                        <p class="score-label t" data-en="Integer Score" data-zh="整数分数">Integer Score</p>
+                        <p class="score-display" id="integer-score">--</p>
+                    </div>
+                </div>
+                <div id="risk-level" style="margin:1.5rem 0;">
+                    <p class="score-label t" data-en="Risk Level" data-zh="风险等级">Risk Level</p>
+                    <span class="risk-badge" id="risk-badge">--</span>
+                </div>
+                <!-- Brief Summary -->
+                <div id="risk-brief" class="info-box" style="text-align:left; margin-top:1rem;">
+                    <p id="advice-brief" style="margin:0;"></p>
+                </div>
+                <!-- Lifestyle Recommendations Button -->
+                <div style="text-align:center; margin-top:1.2rem;">
+                    <button class="btn btn-secondary" onclick="toggleAdvice()" style="font-size:0.95rem;">
+                        <span id="advice-btn-text" class="t" data-en="View Lifestyle Recommendations ↓" data-zh="查看调体建议 ↓">View Lifestyle Recommendations ↓</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Collapsible Lifestyle Recommendations -->
+            <div id="advice-panel" class="card" style="display:none; margin-top:1.5rem;">
+                <h3 class="card-title t" data-en="Lifestyle Recommendations" data-zh="调体建议">Lifestyle Recommendations</h3>
+                <div id="advice-full"></div>
+            </div>
+            <!-- Action Buttons -->
+            <div style="display:flex; gap:1rem; justify-content:center; margin:1.5rem 0; flex-wrap:wrap;">
+                <button class="btn btn-secondary" onclick="goToStep(1)">
+                    <span class="t" data-en="← Back to Start" data-zh="← 返回首页">← Back to Start</span>
+                </button>
+                <button class="btn btn-primary" onclick="scrollToDetails()">
+                    <span class="t" data-en="View Indicator Details ↓" data-zh="查看指标详情 ↓">View Indicator Details ↓</span>
+                </button>
+            </div>
+            <!-- Detailed Results -->
+            <div class="card" id="details-section">
+                <h3 class="card-title t" data-en="Indicator Details" data-zh="指标详情">Indicator Details</h3>
+                <table class="data-table" id="indicators-table">
+                    <thead>
+                        <tr>
+                            <th class="t" data-en="Indicator" data-zh="指标">Indicator</th>
+                            <th class="t" data-en="Your Value" data-zh="您的数值">Your Value</th>
+                            <th class="t" data-en="Status" data-zh="状态">Status</th>
+                            <th class="t" data-en="Points" data-zh="得分">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="indicators-tbody"></tbody>
+                </table>
+                <div style="display:flex; gap:1rem; justify-content:center; margin-top:1.5rem;">
+                    <button class="btn btn-secondary" onclick="window.print()">
+                        🖨 <span class="t" data-en="Print Results" data-zh="打印结果">Print Results</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Disclaimer -->
+        <div class="warning-box" style="margin-top:1rem;">
+            <strong>⚠️ <span class="t" data-en="Disclaimer:" data-zh="免责声明：">Disclaimer:</span></strong>
+            <p class="t" data-en="This tool (CANDID Score) is intended for research and health education purposes only. It does not replace professional clinical diagnosis. If you have health concerns, please consult a qualified medical professional. Risk prevalence anchors (Low 1.7%, Moderate 17.2%, High 46.0%) are derived from the NHANES derivation cohort and may not apply directly to other populations." data-zh="本工具（CANDID Score）仅供科研参考和健康教育目的，不代替专业临床诊断。如有健康疑虑，请咨询专业医疗机构。风险流行率参考值（低风险 1.7%，中风险 17.2%，高风险 46.0%）来源于 NHANES 推导队列，不可直接适用于其他人群。">This tool (CANDID Score) is intended for research and health education purposes only. It does not replace professional clinical diagnosis. If you have health concerns, please consult a qualified medical professional. Risk prevalence anchors (Low 1.7%, Moderate 17.2%, High 46.0%) are derived from the NHANES derivation cohort and may not apply directly to other populations.</p>
+        </div>
+    </div>
+</div>
+<!-- ==================== CircS Page ==================== -->
+<div id="circs" class="page">
+    <div class="card">
+        <h2 class="card-title t" data-en="Circadian Syndrome (CircS) Overview" data-zh="昼夜节律综合征（CircS）概述">Circadian Syndrome (CircS) Overview</h2>
+
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0 1rem;" class="t" data-en="What is CircS?" data-zh="CircS 是什么？">What is CircS?</h3>
+        <p class="t" data-en="Circadian Syndrome (CircS) is a clinical framework that systematically captures the metabolic consequences of circadian rhythm disruption, first proposed by Zimmet et al. in 2019. It extends the traditional Metabolic Syndrome (MetS) by adding two behaviorally-grounded circadian components — sleep deprivation and depressive symptoms — alongside five core metabolic criteria. CircS thereby bridges chronobiology with clinical metabolic medicine, recognizing that disrupted biological rhythms are not merely a lifestyle inconvenience but a systemic driver of cardiometabolic disease." data-zh="昼夜节律综合征（CircS）是一种系统性捕捉昼夜节律紊乱代谢后果的临床框架，由Zimmet等人于2019年首次提出。它在传统代谢综合征（MetS）的基础上，额外纳入了两项以行为为基础的昼夜节律成分——睡眠剥夺和抑郁症状——以及五项核心代谢指标。CircS由此将时间生物学与临床代谢医学相结合，认识到生物节律紊乱不仅是生活方式问题，更是心代谢疾病的系统性驱动力。">Circadian Syndrome (CircS) is a clinical framework that systematically captures the metabolic consequences of circadian rhythm disruption, first proposed by Zimmet et al. in 2019. It extends the traditional Metabolic Syndrome (MetS) by adding two behaviorally-grounded circadian components — sleep deprivation and depressive symptoms — alongside five core metabolic criteria. CircS thereby bridges chronobiology with clinical metabolic medicine, recognizing that disrupted biological rhythms are not merely a lifestyle inconvenience but a systemic driver of cardiometabolic disease.</p>
+
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0 1rem;" class="t" data-en="CircS Diagnostic Criteria" data-zh="CircS 诊断标准">CircS Diagnostic Criteria</h3>
+        <p style="margin-bottom:0.8rem; font-size:0.9rem;" class="t" data-en="CircS is diagnosed when ≥ 4 of the following 7 components are present simultaneously:" data-zh="当以下7项成分中≥4项同时存在时，诊断为CircS：">CircS is diagnosed when ≥ 4 of the following 7 components are present simultaneously:</p>
+        <table class="data-table">
+            <thead><tr><th class="t" data-en="Component" data-zh="成分">Component</th><th class="t" data-en="Criterion" data-zh="判定标准">Criterion</th></tr></thead>
+            <tbody>
+                <tr><td><strong>HG</strong> – <span class="t" data-en="Hyperglycemia" data-zh="高血糖">Hyperglycemia</span></td><td class="t" data-en="FBG ≥ 100 mg/dL or antidiabetic medication" data-zh="空腹血糖 ≥ 100 mg/dL 或使用降糖药">FBG ≥ 100 mg/dL or antidiabetic medication</td></tr>
+                <tr><td><strong>HTN</strong> – <span class="t" data-en="Hypertension" data-zh="高血压">Hypertension</span></td><td class="t" data-en="SBP ≥ 130 mmHg or DBP ≥ 85 mmHg, or antihypertensive medication" data-zh="SBP ≥ 130 mmHg 或 DBP ≥ 85 mmHg，或使用降压药">SBP ≥ 130 mmHg or DBP ≥ 85 mmHg, or antihypertensive medication</td></tr>
+                <tr><td><strong>HTG</strong> – <span class="t" data-en="Hypertriglyceridemia" data-zh="高甘油三酯">Hypertriglyceridemia</span></td><td class="t" data-en="TG ≥ 150 mg/dL or lipid-lowering medication" data-zh="TG ≥ 150 mg/dL 或使用降脂药">TG ≥ 150 mg/dL or lipid-lowering medication</td></tr>
+                <tr><td><strong>CO</strong> – <span class="t" data-en="Central Obesity" data-zh="腹型肥胖">Central Obesity</span></td><td class="t" data-en="WC ≥ 102 cm (male) / ≥ 88 cm (female) [Caucasian]; ≥ 90 cm (male) / ≥ 80 cm (female) [Asian]" data-zh="腰围 ≥ 102 cm（男）/≥ 88 cm（女）[白种人]；≥ 90 cm（男）/≥ 80 cm（女）[亚裔]">WC ≥ 102 cm (male) / ≥ 88 cm (female) [Caucasian]; ≥ 90 cm (male) / ≥ 80 cm (female) [Asian]</td></tr>
+                <tr><td><strong>LHDL</strong> – <span class="t" data-en="Low HDL-C" data-zh="低HDL-C">Low HDL-C</span></td><td class="t" data-en="HDL-C < 40 mg/dL (male) or < 50 mg/dL (female)" data-zh="HDL-C < 40 mg/dL（男）或 < 50 mg/dL（女）">HDL-C &lt; 40 mg/dL (male) or &lt; 50 mg/dL (female)</td></tr>
+                <tr><td><strong>SD</strong> – <span class="t" data-en="Sleep Deprivation" data-zh="睡眠剥夺">Sleep Deprivation</span></td><td class="t" data-en="Average nightly sleep ≤ 7 hours" data-zh="平均夜间睡眠 ≤ 7 小时">Average nightly sleep ≤ 7 hours</td></tr>
+                <tr><td><strong>DEP</strong> – <span class="t" data-en="Depressive Symptoms" data-zh="抑郁症状">Depressive Symptoms</span></td><td class="t" data-en="PHQ-9 > 4 (Caucasian) or CES-D-10 > 10 (Asian)" data-zh="PHQ-9 > 4（白种人）或 CES-D-10 > 10（亚裔）">PHQ-9 &gt; 4 (Caucasian) or CES-D-10 &gt; 10 (Asian)</td></tr>
+            </tbody>
+        </table>
+        <div class="info-box" style="margin-top:0.8rem; margin-bottom:1.5rem;">
+            <p style="font-size:0.85rem; margin:0;" class="t" data-en="In NHANES (n=17,666), 37.8% of participants met CircS criteria. CircS-positive individuals had dramatically higher rates of T2D (33.4% vs 7.9%), hypertension (92.5% vs 56.4%), and obesity (59.3% vs 26.7%) compared to CircS-negative individuals. Middle-aged adults comprised 44.1% of the CircS-positive group." data-zh="在NHANES队列（n=17,666）中，37.8%的参与者符合CircS标准。与CircS阴性人群相比，CircS阳性人群的2型糖尿病（33.4% vs 7.9%）、高血压（92.5% vs 56.4%）和肥胖（59.3% vs 26.7%）发生率大幅偏高。中年人群占CircS阳性群体的44.1%。">In NHANES (n=17,666), 37.8% of participants met CircS criteria. CircS-positive individuals had dramatically higher rates of T2D (33.4% vs 7.9%), hypertension (92.5% vs 56.4%), and obesity (59.3% vs 26.7%) compared to CircS-negative individuals. Middle-aged adults comprised 44.1% of the CircS-positive group.</p>
+        </div>
+
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0 1rem;" class="t" data-en="CircS as a Predictor and Causal Driver of Type 2 Diabetes" data-zh="CircS：2 型糖尿病的预测因子与因果驱动力">CircS as a Predictor and Causal Driver of Type 2 Diabetes</h3>
+        <p style="margin-bottom:1rem;" class="t" data-en="The central question our research addressed: does CircS causally increase T2D risk, or merely co-occur with it? Using four complementary analytical strategies across two independent national cohorts — NHANES (n=17,666, USA) and CHARLS (n=10,795, China) — we established both the predictive power and causal role of CircS in T2D development." data-zh="我们研究所要回答的核心问题是：CircS是否因果性地增加2型糖尿病风险，还是仅与其共同出现？通过在两个独立全国性队列——NHANES（n=17,666，美国）和CHARLS（n=10,795，中国）——中运用四种互补的分析策略，我们同时证明了CircS对T2D发生的预测能力和因果作用。">The central question our research addressed: does CircS causally increase T2D risk, or merely co-occur with it? Using four complementary analytical strategies across two independent national cohorts — NHANES (n=17,666, USA) and CHARLS (n=10,795, China) — we established both the predictive power and causal role of CircS in T2D development.</p>
+
+        <!-- Evidence 1 -->
+        <div class="highlight-box" style="border-color:#1F4E79; margin-bottom:1rem;">
+            <p style="margin-bottom:0.5rem;"><strong style="color:var(--primary-blue);">① <span class="t" data-en="Cross-Sectional Evidence — Multivariable Logistic Regression" data-zh="横断面证据 — 多变量逻辑回归">Cross-Sectional Evidence — Multivariable Logistic Regression</span></strong></p>
+            <p class="t" data-en="After fully adjusting for age, sex, education, income, marital status, race/ethnicity, and smoking, CircS-positive individuals showed substantially elevated odds of prevalent T2D in both cohorts. These associations were statistically robust and replicated across two ethnically and geographically distinct populations." data-zh="在充分调整年龄、性别、教育程度、收入、婚姻状况、种族/民族和吸烟等混杂因素后，CircS阳性人群在两个队列中均表现出显著升高的T2D现患优势比。这些关联在两个种族和地理背景各异的人群中均得到稳健重复。">After fully adjusting for age, sex, education, income, marital status, race/ethnicity, and smoking, CircS-positive individuals showed substantially elevated odds of prevalent T2D in both cohorts. These associations were statistically robust and replicated across two ethnically and geographically distinct populations.</p>
+            <div class="stat-row" style="margin-top:0.8rem;">
+                <div class="stat-item"><div class="stat-value">adj. OR ≈ 4.1</div><div class="stat-label">P &lt; 0.001<br><em class="t" data-en="NHANES (US, multiethnic)" data-zh="NHANES（美国，多民族）">NHANES (US, multiethnic)</em></div></div>
+                <div class="stat-item"><div class="stat-value">adj. OR ≈ 6.6</div><div class="stat-label">P &lt; 0.001<br><em class="t" data-en="CHARLS (Chinese cohort)" data-zh="CHARLS（中国队列）">CHARLS (Chinese cohort)</em></div></div>
+                <div class="stat-item"><div class="stat-value">33.4% vs 7.9%</div><div class="stat-label t" data-en="T2D prevalence: CircS+ vs CircS− (NHANES)" data-zh="T2D患病率：CircS+对比CircS−（NHANES）">T2D prevalence: CircS+ vs CircS− (NHANES)</div></div>
+            </div>
+        </div>
+
+        <!-- Evidence 2 -->
+        <div class="highlight-box" style="border-color:#7030A0; background:linear-gradient(135deg,#FAF5FF,#F3E8FF); margin-bottom:1rem;">
+            <p style="margin-bottom:0.5rem;"><strong style="color:#7030A0;">② <span class="t" data-en="Longitudinal Evidence — Cox Proportional Hazards Regression" data-zh="纵向证据 — Cox 比例风险回归">Longitudinal Evidence — Cox Proportional Hazards Regression</span></strong></p>
+            <p class="t" data-en="In NHANES participants followed through 2018, multivariable Cox regression confirmed that baseline CircS independently predicted future incident T2D. Kaplan-Meier survival analysis demonstrated a significantly accelerated decline in diabetes-free survival among CircS-positive individuals throughout the follow-up period, with progressively widening separation between groups." data-zh="在随访至2018年的NHANES参与者中，多变量Cox回归证实基线CircS独立预测未来新发T2D。Kaplan-Meier生存分析显示，CircS阳性人群在整个随访期间无糖尿病生存概率显著加速下降，且两组间差异持续扩大。">In NHANES participants followed through 2018, multivariable Cox regression confirmed that baseline CircS independently predicted future incident T2D. Kaplan-Meier survival analysis demonstrated a significantly accelerated decline in diabetes-free survival among CircS-positive individuals throughout the follow-up period, with progressively widening separation between groups.</p>
+            <div class="info-box" style="margin-top:0.8rem; background:#faf5ff; border-color:#7030A0;">
+                <p style="font-size:0.88rem; margin:0;" class="t" data-en="Stratified subgroup analyses revealed a striking age-dependent pattern: the relative T2D risk amplification by CircS was significantly more pronounced in young and middle-aged adults than in elderly populations (interaction P &lt; 0.05). This disproportionate vulnerability in younger demographics likely reflects intensified modern circadian disruptors — including pervasive artificial light at night and irregular meal timing — acting during a critical window of metabolic plasticity." data-zh="分层亚组分析揭示了显著的年龄依赖性规律：CircS对T2D的相对风险放大效应在年轻和中年人群中显著强于老年人群（交互检验P&lt;0.05）。年轻人群的这种不成比例的易感性，可能反映了现代昼夜节律干扰因素（包括普遍的夜间人工照明和不规律进餐时间）在代谢可塑性关键窗口期的强化作用。">Stratified subgroup analyses revealed a striking age-dependent pattern: the relative T2D risk amplification by CircS was significantly more pronounced in young and middle-aged adults than in elderly populations (interaction P &lt; 0.05). This disproportionate vulnerability in younger demographics likely reflects intensified modern circadian disruptors — including pervasive artificial light at night and irregular meal timing — acting during a critical window of metabolic plasticity.</p>
+            </div>
+        </div>
+
+        <!-- Evidence 3 -->
+        <div class="highlight-box" style="border-color:#E36C09; background:linear-gradient(135deg,#FFF8F0,#FFF3E0); margin-bottom:1rem;">
+            <p style="margin-bottom:0.5rem;"><strong style="color:#C66000;">③ <span class="t" data-en="Mechanistic Evidence — Mediation Analysis" data-zh="机制证据 — 中介分析">Mechanistic Evidence — Mediation Analysis</span></strong></p>
+            <p class="t" data-en="Mediation analyses in NHANES identified insulin resistance and hepatic steatosis as the primary biological pathways through which CircS drives T2D. These two interconnected mechanisms collectively mediate more than half of the total CircS-to-T2D effect, revealing specific therapeutic targets for intervention." data-zh="NHANES队列的中介分析表明，胰岛素抵抗和肝脂肪变性是CircS驱动T2D的主要生物学通路。这两条相互关联的机制共同中介了CircS影响T2D总效应的一半以上，揭示了具体的干预靶点。">Mediation analyses in NHANES identified insulin resistance and hepatic steatosis as the primary biological pathways through which CircS drives T2D. These two interconnected mechanisms collectively mediate more than half of the total CircS-to-T2D effect, revealing specific therapeutic targets for intervention.</p>
+            <div class="stat-row" style="margin-top:0.8rem;">
+                <div class="stat-item" style="border-top-color:#E36C09;"><div class="stat-value" style="color:#C66000;">52.5%</div><div class="stat-label t" data-en="Mediated via hepatic steatosis (USFLI)" data-zh="经肝脂肪变性（USFLI）中介">Mediated via hepatic steatosis (USFLI)</div></div>
+                <div class="stat-item" style="border-top-color:#E36C09;"><div class="stat-value" style="color:#C66000;">46.0%</div><div class="stat-label t" data-en="Mediated via insulin resistance (METS-IR)" data-zh="经胰岛素抵抗（METS-IR）中介">Mediated via insulin resistance (METS-IR)</div></div>
+                <div class="stat-item" style="border-top-color:#E36C09;"><div class="stat-value" style="color:#C66000;">43.6%</div><div class="stat-label t" data-en="Mediated via HOMA-IR" data-zh="经HOMA-IR中介">Mediated via HOMA-IR</div></div>
+            </div>
+        </div>
+
+        <!-- Evidence 4 -->
+        <div class="highlight-box" style="border-color:#C00000; background:linear-gradient(135deg,#FFF5F5,#FFEBEE); margin-bottom:1rem;">
+            <p style="margin-bottom:0.5rem;"><strong style="color:#C00000;">④ <span class="t" data-en="Causal Evidence — Two-Sample Mendelian Randomization" data-zh="因果证据 — 双样本孟德尔随机化">Causal Evidence — Two-Sample Mendelian Randomization</span></strong></p>
+            <p class="t" data-en="To move beyond observational association, we performed two-sample Mendelian randomization (MR) using large-scale GWAS data from the FinnGen consortium (n&gt;460,000). Genetically predicted dietary rhythm regularity — a validated genetic proxy for circadian behavioral integrity — served as the exposure instrument. Independent GWAS summary statistics for obesity and T2D from FinnGen served as outcomes. A total of 21 independent SNPs were used for the obesity analysis and 20 for T2D." data-zh="为超越观察性关联建立因果推断，我们利用FinnGen联盟大规模GWAS数据（n&gt;460,000）开展了双样本孟德尔随机化（MR）分析。遗传预测的饮食节律规律性——昼夜节律行为完整性的经验证遗传代理指标——作为工具变量。来自FinnGen的肥胖和T2D独立GWAS汇总统计数据作为结局变量。肥胖分析采用21个独立SNP，T2D分析采用20个。">To move beyond observational association, we performed two-sample Mendelian randomization (MR) using large-scale GWAS data from the FinnGen consortium (n&gt;460,000). Genetically predicted dietary rhythm regularity — a validated genetic proxy for circadian behavioral integrity — served as the exposure instrument. Independent GWAS summary statistics for obesity and T2D from FinnGen served as outcomes. A total of 21 independent SNPs were used for the obesity analysis and 20 for T2D.</p>
+            <div class="stat-row" style="margin-top:0.8rem;">
+                <div class="stat-item" style="border-top-color:#C00000;"><div class="stat-value" style="color:#C00000;">OR = 1.49</div><div class="stat-label">IVW, 21 SNPs, P &lt; 0.001<br><em class="t" data-en="Dietary rhythm disruption → Obesity" data-zh="饮食节律紊乱 → 肥胖">Dietary rhythm disruption → Obesity</em></div></div>
+                <div class="stat-item" style="border-top-color:#C00000;"><div class="stat-value" style="color:#C00000;">OR = 2.72</div><div class="stat-label">IVW, 20 SNPs, P &lt; 0.001<br><em class="t" data-en="Dietary rhythm disruption → T2D" data-zh="饮食节律紊乱 → T2D">Dietary rhythm disruption → T2D</em></div></div>
+                <div class="stat-item" style="border-top-color:#C00000;"><div class="stat-value" style="color:#C00000;"><span class="t" data-en="No pleiotropy" data-zh="无多效性">No pleiotropy</span></div><div class="stat-label t" data-en="MR-Egger intercept non-significant; leave-one-out analyses stable" data-zh="MR-Egger截距无统计学意义；逐一剔除分析结果稳健">MR-Egger intercept non-significant; leave-one-out analyses stable</div></div>
+            </div>
+            <div class="info-box" style="margin-top:0.8rem; background:#fff8f8; border-color:#C00000;">
+                <p style="font-size:0.88rem; margin:0;" class="t" data-en="Causal estimates were highly consistent across four MR methods — inverse-variance weighted (IVW), weighted median, simple mode, and weighted mode — confirming robustness to outliers and pleiotropy. This establishes a unidirectional causal axis: disruption of circadian dietary rhythms → obesity → type 2 diabetes, providing genetic-level evidence that circadian disruption is a genuine upstream cause of T2D, not merely a metabolic correlate." data-zh="因果效应估计在逆方差加权（IVW）、加权中位数、简单众数和加权众数四种MR方法间高度一致，确认了结果对离群值和多效性的稳健性。这建立了一条单向因果链：昼夜节律饮食规律的紊乱 → 肥胖 → 2型糖尿病。该遗传学层面的证据表明，昼夜节律紊乱是T2D的真正上游原因，而非仅仅是其代谢相关因素。">Causal estimates were highly consistent across four MR methods — inverse-variance weighted (IVW), weighted median, simple mode, and weighted mode — confirming robustness to outliers and pleiotropy. This establishes a unidirectional causal axis: disruption of circadian dietary rhythms → obesity → type 2 diabetes, providing genetic-level evidence that circadian disruption is a genuine upstream cause of T2D, not merely a metabolic correlate.</p>
+            </div>
+        </div>
+
+        <!-- From CircS to CANDID -->
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0 1rem;" class="t" data-en="From CircS to CANDID: Why a Weighted Index?" data-zh="从 CircS 到 CANDID：为什么需要加权指数？">From CircS to CANDID: Why a Weighted Index?</h3>
+        <p style="margin-bottom:0.8rem;" class="t" data-en="Although CircS reliably identifies high-risk individuals, its original binary definition (≥ 4 of 7 components) implicitly treats all seven components as equally diabetogenic. This assumption is biologically untenable: hyperglycemia — the defining feature of diabetes itself — should carry far greater predictive weight than sleep duration or mood symptoms. Explainable machine learning (XGBoost + SHAP) allows us to quantify each component's individualized contribution, resolving this equivalence assumption." data-zh="尽管CircS能可靠地识别高风险人群，其原始二分类定义（7项中≥4项）却隐含地将所有七项成分视为对糖尿病发生贡献相同。这一假设在生物学上是站不住脚的：高血糖作为糖尿病本身的定义性特征，其预测权重理应远高于睡眠时长或情绪症状。可解释机器学习（XGBoost + SHAP）使我们能够量化每个成分的个体化贡献，从而解决这一等权假设的局限。">Although CircS reliably identifies high-risk individuals, its original binary definition (≥ 4 of 7 components) implicitly treats all seven components as equally diabetogenic. This assumption is biologically untenable: hyperglycemia — the defining feature of diabetes itself — should carry far greater predictive weight than sleep duration or mood symptoms. Explainable machine learning (XGBoost + SHAP) allows us to quantify each component's individualized contribution, resolving this equivalence assumption.</p>
+        <div class="highlight-box" style="border-color:#375623; background:linear-gradient(135deg,#F0F8F0,#E8F5E9); margin-bottom:1rem;">
+            <p style="margin-bottom:0.5rem;"><strong style="color:#375623;" class="t" data-en="SHAP-Derived Component Weights (XGBoost trained on NHANES derivation set, n=14,071; validated on CHARLS, n=10,795)" data-zh="SHAP 衍生成分权重（XGBoost训练于NHANES推导集 n=14,071；CHARLS验证集 n=10,795）">SHAP-Derived Component Weights (XGBoost trained on NHANES, n=14,071; validated on CHARLS, n=10,795)</strong></p>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.6rem; font-size:0.85rem;">
+                <span style="background:#E8F4FD; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #90c4e4;"><strong>HG</strong> 0.428 → 20 pts</span>
+                <span style="background:#EAF4E8; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #90c490;"><strong>HTN</strong> 0.190 → 9 pts</span>
+                <span style="background:#FFF3E0; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #ffcc80;"><strong>HTG</strong> 0.151 → 7 pts</span>
+                <span style="background:#FFF3E0; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #ffcc80;"><strong>CO</strong> 0.137 → 6 pts</span>
+                <span style="background:#F3F0FF; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #c5b0f0;"><strong>LHDL</strong> 0.049 → 2 pts</span>
+                <span style="background:#FFEBEE; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #ef9a9a;"><strong>SD</strong> 0.023 → 1 pt</span>
+                <span style="background:#FFEBEE; padding:0.35rem 0.7rem; border-radius:4px; border:1px solid #ef9a9a;"><strong>DEP</strong> 0.022 → 1 pt</span>
+            </div>
+            <p style="font-size:0.82rem; margin-top:0.7rem; color:#555;" class="t" data-en="Hyperglycemia (HG) accounts for 42.8% of the total predictive weight — nearly double the second-ranked component (HTN, 19.0%). Sleep deprivation and depressive symptoms, absent from traditional MetS, together contribute incremental yet statistically significant risk information that improves discrimination beyond metabolic markers alone." data-zh="高血糖（HG）占总预测权重的42.8%——几乎是排名第二的成分（高血压HTN，19.0%）的两倍。睡眠剥夺和抑郁症状在传统MetS中缺失，但共同贡献了增量且统计学上显著的风险信息，使模型判别能力超越了单纯依赖代谢标志物的水平。">Hyperglycemia (HG) accounts for 42.8% of the total predictive weight — nearly double the second-ranked component (HTN, 19.0%). Sleep deprivation and depressive symptoms, absent from traditional MetS, together contribute incremental yet statistically significant risk information that improves discrimination beyond metabolic markers alone.</p>
+        </div>
+
+        <div class="info-box" style="margin-top:1rem;">
+            <strong class="t" data-en="Key References:" data-zh="关键参考文献：">Key References:</strong>
+            <p style="margin-top:0.4rem; font-size:0.87rem;">Zimmet P, Alberti K, Stern N, et al. The Circadian Syndrome: is the Metabolic Syndrome and much more! <em>J Intern Med.</em> 2019;286:181–191.</p>
+            <p style="margin-top:0.3rem; font-size:0.87rem;">Sun H, Lin X, Zhao S, et al. Circadian Syndrome as a Causal Catalyst for Type 2 Diabetes: Multinational Cohort Validation, Mendelian Randomization, and Machine Learning-Derived CANDID Score. [Submitted to <em>Diabetes Care</em>]</p>
+        </div>
+    </div>
+</div>
+<!-- ==================== Model Page ==================== -->
+<div id="model" class="page">
+    <div class="card">
+        <h2 class="card-title t" data-en="Model Details" data-zh="模型详情">Model Details</h2>
+        <h3 style="color:var(--primary-blue); margin:1rem 0;" class="t" data-en="CANDID Score Calculation" data-zh="CANDID Score 计算方法">CANDID Score Calculation</h3>
+        <p class="t" data-en="The CANDID Score is derived from seven CircS components. Each component is weighted according to its SHAP feature importance derived from XGBoost models trained across both cohorts. Components are individually scored as binary (0 or 1) indicators and then weighted." data-zh="CANDID Score来源于七个CircS组分。各组分根据XGBoost模型的SHAP特征重要性进行加权，各组分以二分类（0或1）指标形式赋分后再加权汇总。">The CANDID Score is derived from seven CircS components. Each component is weighted according to its SHAP feature importance derived from XGBoost models trained across both cohorts. Components are individually scored as binary (0 or 1) indicators and then weighted.</p>
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0;" class="t" data-en="Component Weights (SHAP-derived)" data-zh="组分权重（SHAP权重）">Component Weights (SHAP-derived)</h3>
+        <table class="data-table">
+            <thead><tr><th class="t" data-en="Component" data-zh="组分">Component</th><th class="t" data-en="Description" data-zh="说明">Description</th><th class="t" data-en="Weight" data-zh="权重">Weight</th><th class="t" data-en="Integer Score" data-zh="整数分值">Integer Score</th></tr></thead>
+            <tbody>
+                <tr><td><strong>HG</strong></td><td class="t" data-en="Hyperglycemia (FBG ≥ 100 mg/dL or antidiabetic medication)" data-zh="高血糖（FBG ≥ 100 mg/dL 或使用降糖药）">Hyperglycemia (FBG ≥ 100 mg/dL or antidiabetic medication)</td><td>0.428</td><td>20</td></tr>
+                <tr><td><strong>HTN</strong></td><td class="t" data-en="Hypertension (SBP ≥ 130 or DBP ≥ 85 mmHg or antihypertensive medication)" data-zh="高血压（SBP ≥ 130 或 DBP ≥ 85 mmHg 或使用降压药）">Hypertension (SBP ≥ 130 or DBP ≥ 85 mmHg or antihypertensive medication)</td><td>0.190</td><td>9</td></tr>
+                <tr><td><strong>HTG</strong></td><td class="t" data-en="Hypertriglyceridemia (TG ≥ 150 mg/dL or lipid-lowering medication)" data-zh="高甘油三酯（TG ≥ 150 mg/dL 或使用降脂药）">Hypertriglyceridemia (TG ≥ 150 mg/dL or lipid-lowering medication)</td><td>0.151</td><td>7</td></tr>
+                <tr><td><strong>CO</strong></td><td class="t" data-en="Central Obesity (WC ≥ 102/88 cm [Caucasian] or ≥ 90/80 cm [Asian], male/female)" data-zh="腹型肥胖（腰围 ≥ 102/88 cm [白种人] 或 ≥ 90/80 cm [亚裔]，男/女）">Central Obesity (WC ≥ 102/88 cm [Caucasian] or ≥ 90/80 cm [Asian], male/female)</td><td>0.137</td><td>6</td></tr>
+                <tr><td><strong>LHDL</strong></td><td class="t" data-en="Low HDL-C (< 40 mg/dL male; < 50 mg/dL female)" data-zh="低HDL-C（男 < 40 mg/dL；女 < 50 mg/dL）">Low HDL-C (&lt; 40 mg/dL male; &lt; 50 mg/dL female)</td><td>0.049</td><td>2</td></tr>
+                <tr><td><strong>SD</strong></td><td class="t" data-en="Sleep Deprivation (≤ 7 hours/night)" data-zh="睡眠剥夺（≤ 7 小时/夜）">Sleep Deprivation (≤ 7 hours/night)</td><td>0.023</td><td>1</td></tr>
+                <tr><td><strong>DEP</strong></td><td class="t" data-en="Depressive Symptoms (PHQ-9 > 4 / CES-D-10 > 10)" data-zh="抑郁症状（PHQ-9 > 4 / CES-D-10 > 10）">Depressive Symptoms (PHQ-9 &gt; 4 / CES-D-10 &gt; 10)</td><td>0.022</td><td>1</td></tr>
+            </tbody>
+        </table>
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0;" class="t" data-en="Risk Thresholds" data-zh="风险阈值">Risk Thresholds</h3>
+        <table class="data-table">
+            <thead><tr><th class="t" data-en="Risk Level" data-zh="风险级别">Risk Level</th><th class="t" data-en="Integer Score Range" data-zh="整数分值区间">Integer Score Range</th><th class="t" data-en="Interpretation" data-zh="含义">Interpretation</th></tr></thead>
+            <tbody>
+                <tr><td><span style="color:var(--risk-green); font-weight:700;">Low Risk</span></td><td>0–16</td><td class="t" data-en="T2D prevalence 1.7% in NHANES; 0% in CHARLS validation set" data-zh="T2D患病率：NHANES 1.7%；CHARLS验证集 0%">T2D prevalence 1.7% in NHANES; 0% in CHARLS validation set</td></tr>
+                <tr><td><span style="color:var(--risk-yellow); font-weight:700;">Medium Risk</span></td><td>17–34</td><td class="t" data-en="T2D prevalence 17.2% (NHANES) / 15.8% (CHARLS); OR 12.0 vs Low Risk" data-zh="T2D患病率：17.2%（NHANES）/ 15.8%（CHARLS）；vs 低风险 OR=12.0">T2D prevalence 17.2% (NHANES) / 15.8% (CHARLS); OR 12.0 vs Low Risk</td></tr>
+                <tr><td><span style="color:var(--risk-red); font-weight:700;">High Risk</span></td><td>≥ 35</td><td class="t" data-en="T2D prevalence 46.0% (NHANES) / 38.0% (CHARLS); OR 49.2 vs Low Risk" data-zh="T2D患病率：46.0%（NHANES）/ 38.0%（CHARLS）；vs 低风险 OR=49.2">T2D prevalence 46.0% (NHANES) / 38.0% (CHARLS); OR 49.2 vs Low Risk</td></tr>
+            </tbody>
+        </table>
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0;" class="t" data-en="Discriminatory Performance (AUC)" data-zh="判别性能（AUC）">Discriminatory Performance (AUC)</h3>
+        <table class="data-table">
+            <thead><tr><th class="t" data-en="Model" data-zh="模型">Model</th><th class="t" data-en="Internal AUC (NHANES)" data-zh="内部验证 AUC">Internal AUC (NHANES)</th><th class="t" data-en="External AUC (CHARLS)" data-zh="外部验证 AUC">External AUC (CHARLS)</th><th>DeLong P</th></tr></thead>
+            <tbody>
+                <tr><td><strong>CANDID Score</strong></td><td><strong>0.826 (0.814–0.838)</strong></td><td><strong>0.904 (0.891–0.917)</strong></td><td>-- (Reference)</td></tr>
+                <tr><td>TyG Index</td><td>0.755</td><td>0.743</td><td>P &lt; 0.001</td></tr>
+                <tr><td>METS-IR</td><td>0.772</td><td>0.764</td><td>P &lt; 0.001</td></tr>
+                <tr><td>CircS</td><td>0.778</td><td>0.791</td><td>P &lt; 0.001</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- ==================== References Page ==================== -->
+<div id="references" class="page">
+    <div class="card">
+        <h2 class="card-title t" data-en="References" data-zh="参考文献">References</h2>
+        <h3 style="color:var(--primary-blue); margin:1rem 0;" class="t" data-en="Circadian Syndrome" data-zh="昼夜节律综合征">Circadian Syndrome</h3>
+        <div class="reference-item"><strong>[1] CircS Original</strong><p>Zimmet P, Alberti K, Stern N, Bilu C, El-Osta A, Einat H, Kronfeld-Schor N.</p><p><em>The Circadian Syndrome: is the Metabolic Syndrome and much more!</em></p><p>J Intern Med. 2019;286:181–191.</p></div>
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0;" class="t" data-en="Depression Scales" data-zh="抑郁量表">Depression Scales</h3>
+        <div class="reference-item"><strong>[2] PHQ-9 – Patient Health Questionnaire-9</strong><p>Kroenke K, Spitzer RL, Williams JB.</p><p><em>The PHQ-9: Validity of a Brief Depression Severity Measure.</em></p><p>Journal of General Internal Medicine. 2001;16(9):606-616.</p><p>DOI: <strong>10.1046/j.1525-1497.2001.016009606.x</strong></p></div>
+        <div class="reference-item"><strong>[3] CES-D-10 – Center for Epidemiologic Studies Depression Scale-10</strong><p>Mohebbi M, Nguyen V, McNeil JJ, et al.</p><p><em>Psychometric Properties of a Short Form of the CES-D-10 for Screening Depressive Symptoms in Healthy Community Dwelling Older Adults.</em></p><p>General Hospital Psychiatry. 2018;51:118-125.</p><p>DOI: <strong>10.1016/j.genhosppsych.2017.08.002</strong></p></div>
+        <div class="reference-item"><strong>[4] CES-D-10 Original</strong><p>Miller WC, Anton HA, Townson AF.</p><p><em>Measurement properties of the CESD scale among individuals with spinal cord injury.</em></p><p>Spinal Cord. 2008;46:287-292.</p></div>
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0;" class="t" data-en="Metabolic Syndrome Criteria" data-zh="代谢综合征标准">Metabolic Syndrome Criteria</h3>
+        <div class="reference-item"><strong>[5] NCEP-ATP III Metabolic Syndrome Criteria</strong><p>Grundy SM, Cleeman JI, Daniels SR, et al.</p><p><em>Diagnosis and Management of the Metabolic Syndrome: An American Heart Association/National Heart, Lung, and Blood Institute Scientific Statement.</em></p><p>Circulation. 2005;112(17):2735-2752.</p><p>DOI: <strong>10.1161/CIRCULATIONAHA.105.169404</strong></p></div>
+        <div class="reference-item"><strong>[6] Asian Obesity Criteria</strong><p>Pan XF, Wang L, Pan A.</p><p><em>Epidemiology and determinants of obesity in China.</em></p><p>Lancet Diabetes Endocrinol. 2021;9(6):373-392.</p></div>
+        <h3 style="color:var(--primary-blue); margin:1.5rem 0;" class="t" data-en="Lifestyle &amp; Prevention Guidelines" data-zh="生活方式与预防指南">Lifestyle &amp; Prevention Guidelines</h3>
+        <div class="reference-item"><strong>[7] Sleep Duration Recommendations – National Sleep Foundation</strong><p>Hirshkowitz M, Whiton K, Albert SM, et al.</p><p><em>National Sleep Foundation's updated sleep duration recommendations: final report.</em></p><p>Sleep Health. 2015;1(4):233-243.</p><p>DOI: <strong>10.1016/j.sleh.2015.10.004</strong></p></div>
+        <div class="reference-item"><strong>[8] Mediterranean Diet – PREDIMED Trial</strong><p>Estruch R, Ros E, Salas-Salvado J, et al.</p><p><em>Primary prevention of cardiovascular disease with a Mediterranean diet supplemented with extra-virgin olive oil or nuts.</em></p><p>N Engl J Med. 2018;378(25):e34.</p><p>DOI: <strong>10.1056/NEJMoa1800389</strong></p></div>
+        <div class="reference-item"><strong>[9] American Diabetes Association – Standards of Medical Care in Diabetes</strong><p>American Diabetes Association.</p><p><em>Prevention or Delay of Diabetes and Associated Comorbidities: Standards of Care in Diabetes-2024.</em></p><p>Diabetes Care. 2024;47:S43–S51.</p></div>
+        <div class="reference-item"><strong>[10] Physical Activity and Diabetes Prevention – ADA</strong><p>Colberg SR, Sigal RJ, Yardley JE, et al.</p><p><em>Physical activity/exercise and diabetes: a position statement of the American Diabetes Association.</em></p><p>Diabetes Care. 2016;39(11):2065-2079.</p><p>DOI: <strong>10.2337/dc16-1728</strong></p></div>
+        <div class="reference-item"><strong>[11] Diabetes Prevention Program (DPP) – Lifestyle Interventions</strong><p>Diabetes Prevention Program Research Group.</p><p><em>Reduction in the incidence of type 2 diabetes with lifestyle intervention or metformin.</em></p><p>N Engl J Med. 2002;346(6):393-403.</p><p>DOI: <strong>10.1056/NEJMoa012512</strong></p></div>
+        <div class="reference-item"><strong>[12] Look AHEAD Trial – Weight Loss and Diabetes Outcomes</strong><p>Wing RR, Bolger P, et al.</p><p><em>Cardiovascular effects of intensive lifestyle intervention in type 2 diabetes.</em></p><p>N Engl J Med. 2013;369(2):145-154.</p><p>DOI: <strong>10.1056/NEJMoa1212914</strong></p></div>
+    </div>
+</div>
+</main>
+<footer class="footer">
+    <p><strong>CANDID Score</strong> – Circadian And Nocturnal Disruption Index for Diabetes</p>
+    <p class="t" data-en="Built on NHANES and CHARLS cohort data" data-zh="基于NHANES和CHARLS队列数据构建">Built on NHANES and CHARLS cohort data</p>
+    <p style="margin-top:1rem; font-size:0.8rem;" class="t" data-en="For research purposes only · Not for clinical diagnosis" data-zh="仅供科研参考 · 不代替临床诊断">For research purposes only · Not for clinical diagnosis</p>
+</footer>
+<!-- Depression Questionnaire Modal -->
+<div id="depressionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Depression Questionnaire</h3>
+            <button class="modal-close" onclick="closeDepressionQuestionnaire()">×</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+    </div>
+</div>
+<script>
+let currentLang = 'en';
+function setLang(lang) {
+    currentLang = lang;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.querySelectorAll('.t').forEach(el => {
+        const val = el.getAttribute('data-' + lang);
+        if (val !== null) el.textContent = val;
+    });
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    refreshDynamicText();
+}
+function refreshDynamicText() {
+    updateDepressionHint();
+    syncDBPUnitLabel();
+    const adviceBtn = document.getElementById('advice-btn-text');
+    const panel = document.getElementById('advice-panel');
+    const isZH = currentLang === 'zh';
+    if (panel && panel.style.display === 'block') {
+        adviceBtn.textContent = isZH ? '收起建议 ↑' : 'Collapse Recommendations ↑';
+    } else {
+        adviceBtn.textContent = isZH ? '查看调体建议 ↓' : 'View Lifestyle Recommendations ↓';
+    }
+    if (window.lastRiskKey && document.getElementById('step3').classList.contains('active')) {
+        const riskTexts = RISK_TEXT[currentLang][window.lastRiskKey];
+        const badge = document.getElementById('risk-badge');
+        badge.textContent = riskTexts.badge;
+        document.getElementById('advice-brief').textContent = riskTexts.brief;
+        if (panel && panel.style.display === 'block') {
+            document.getElementById('advice-full').innerHTML = riskTexts.advice(population);
+        }
+    }
+}
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(this.getAttribute('data-page')).classList.add('active');
+    });
+});
+
+function goToStep(step) {
+    currentStep = step;
+    document.querySelectorAll('.step-content').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = '';
+    });
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
+    document.getElementById('step' + step).classList.add('active');
+    for (let i = 1; i <= 3; i++) {
+        const ind = document.getElementById('step' + i + '-indicator');
+        if (i < step) ind.classList.add('completed');
+        else if (i === step) ind.classList.add('active');
+    }
+    document.querySelector('.step-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function scrollToDetails() {
+    document.getElementById('details-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function toggleAdvice() {
+    const panel = document.getElementById('advice-panel');
+    const btn = document.getElementById('advice-btn-text');
+    const isZH = currentLang === 'zh';
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        btn.textContent = isZH ? '收起建议 ↑' : 'Collapse Recommendations ↑';
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        panel.style.display = 'none';
+        btn.textContent = isZH ? '查看调体建议 ↓' : 'View Lifestyle Recommendations ↓';
+    }
+}
+let population = '';
+let gender = '';
+let currentStep = 1;
+function updatePopulationSettings() {
+    population = document.getElementById('population').value;
+    gender = document.getElementById('gender').value;
+    document.getElementById('step1-error').style.display = 'none';
+    updateDepressionHint();
+}
+function updateGenderSettings() {
+    gender = document.getElementById('gender').value;
+    population = document.getElementById('population').value;
+    document.getElementById('step1-error').style.display = 'none';
+}
+function tryGoToStep2() {
+    population = document.getElementById('population').value;
+    gender = document.getElementById('gender').value;
+    const errEl = document.getElementById('step1-error');
+    if (!population || !gender) {
+        errEl.textContent = currentLang === 'zh' ? '请先选择人群和性别。' : 'Please select both Population and Gender.';
+        errEl.style.display = 'block';
+        return;
+    }
+    errEl.style.display = 'none';
+    updateDepressionHint();
+    goToStep(2);
+}
+const SANITY = {
+    fbg: { mmol: [2.5, 33.3],  mgdl: [45, 600]   },
+    tg:  { mmol: [0.2, 22.6],  mgdl: [18, 2000]  },
+    hdl: { mmol: [0.3, 3.9],   mgdl: [12, 150]   },
+    wc:  {
+        asian:     { cm: [50, 165], in: [20, 65] },
+        caucasian: { cm: [55, 200], in: [22, 79] }
+    },
+    sbp: { mmhg: [70, 280],    kpa:  [9.3, 37.3] },
+    dbp: { mmhg: [30, 180],    kpa:  [4.0, 24.0] }
+};
+let _rangeCheckActive = false;
+function checkFieldRange(field) {
+    if (_rangeCheckActive) return;
+    const input = document.getElementById(field);
+    const val = parseFloat(input.value);
+    if (isNaN(val) || val === 0) return;
+    const unitEl = document.getElementById(field + '-unit');
+    const unit = unitEl ? unitEl.value : null;
+    if (!unit || !SANITY[field]) return;
+    let range;
+    if (field === 'wc') {
+        const pop = population || 'caucasian';
+        range = (SANITY.wc[pop] || SANITY.wc.caucasian)[unit];
+    } else {
+        range = SANITY[field][unit];
+    }
+    if (!range) return;
+    const [mn, mx] = range;
+    if (val < mn || val > mx) {
+        _rangeCheckActive = true;
+        const isZH = currentLang === 'zh';
+        const unitLabel = unitEl.options[unitEl.selectedIndex].text;
+        const msg = isZH
+            ? `您输入的值（${val} ${unitLabel}）超出了该指标的物理合理范围。\n\n请检查计量单位选择是否正确，再继续填写。\n\n点击「确定」表示您确认值和单位均无误；点击「取消」返回修改。`
+            : `The value you entered (${val} ${unitLabel}) appears outside the physically plausible range for this unit.\n\nPlease verify that your unit selection is correct before proceeding.\n\nClick OK to confirm the value and unit are correct, or Cancel to review your input.`;
+        const confirmed = confirm(msg);
+        _rangeCheckActive = false;
+        if (!confirmed) setTimeout(() => input.focus(), 0);
+    }
+}
+const lastUnit = { fbg: 'mmol', tg: 'mmol', hdl: 'mmol', wc: 'cm', sbp: 'mmhg', dbp: 'mmhg' };
+function handleUnitChange(field) {
+    const input = document.getElementById(field);
+    const unitSel = document.getElementById(field + '-unit');
+    const newUnit = unitSel.value;
+    const oldUnit = lastUnit[field];
+    const val = parseFloat(input.value);
+    if (isNaN(val) || !val) { lastUnit[field] = newUnit; return; }
+    let converted = val;
+    if (field === 'fbg' && newUnit !== oldUnit) {
+        converted = newUnit === 'mgdl' ? val * 18.0182 : val / 18.0182;
+    } else if (field === 'tg' && newUnit !== oldUnit) {
+        converted = newUnit === 'mgdl' ? val * 88.545 : val / 88.545;
+    } else if (field === 'hdl' && newUnit !== oldUnit) {
+        converted = newUnit === 'mgdl' ? val * 38.67 : val / 38.67;
+    } else if (field === 'wc' && newUnit !== oldUnit) {
+        converted = newUnit === 'in' ? val / 2.54 : val * 2.54;
+    } else if ((field === 'sbp' || field === 'dbp') && newUnit !== oldUnit) {
+        converted = newUnit === 'kpa' ? val * 0.133322 : val / 0.133322;
+    }
+    input.value = Math.round(converted * 10) / 10;
+    lastUnit[field] = newUnit;
+    if (newUnit !== oldUnit) checkFieldRange(field);
+}
+function syncDBPUnitLabel() {
+    const dbpUnit = document.getElementById('dbp-unit');
+    if (!dbpUnit) return;
+    const unit = dbpUnit.value;
+    const isZH = currentLang === 'zh';
+    const unitText = unit === 'kpa' ? 'kPa' : 'mmHg';
+    const label = dbpUnit.closest('.form-group').querySelector('label');
+    if (label) {
+        label.textContent = isZH ? '血压 — 舒张压（DBP） ' + unitText : 'Blood Pressure — Diastolic (DBP) ' + unitText;
+    }
+}
+function updateDepressionHint() {
+    if (!population) return;
+    const cutoff = CUTOFFS[population];
+    const hint = document.getElementById('depression-hint');
+    const btnText = document.getElementById('depression-btn-text');
+    if (cutoff.depression_scale === 'PHQ-9') {
+        hint.textContent = currentLang === 'zh' ? 'PHQ-9 > 4 分为抑郁筛查阳性' : 'PHQ-9 > 4 indicates positive screening';
+        btnText.setAttribute('data-en', 'Fill PHQ-9 Questionnaire');
+        btnText.setAttribute('data-zh', '填写 PHQ-9 量表');
+        btnText.textContent = currentLang === 'zh' ? '填写 PHQ-9 量表' : 'Fill PHQ-9 Questionnaire';
+    } else {
+        hint.textContent = currentLang === 'zh' ? 'CES-D-10 > 10 分为抑郁筛查阳性' : 'CES-D-10 > 10 indicates positive screening';
+        btnText.setAttribute('data-en', 'Fill CES-D-10 Questionnaire');
+        btnText.setAttribute('data-zh', '填写 CES-D-10 量表');
+        btnText.textContent = currentLang === 'zh' ? '填写 CES-D-10 量表' : 'Fill CES-D-10 Questionnaire';
+    }
+}
+const CUTOFFS = {
+    asian: {
+        wc_male: 90, wc_female: 80,
+        hdl_male: 40, hdl_female: 50,
+        depression_scale: 'CES-D-10', depression_positive: 10,
+        weights: { HG:0.428, HTN:0.190, HTG:0.151, CO:0.137, LHDL:0.049, SD:0.023, DEP:0.022 },
+        integer: { HG:20, HTN:9, HTG:7, CO:6, LHDL:2, SD:1, DEP:1 }
+    },
+    caucasian: {
+        wc_male: 102, wc_female: 88,
+        hdl_male: 40, hdl_female: 50,
+        depression_scale: 'PHQ-9', depression_positive: 4,
+        weights: { HG:0.428, HTN:0.190, HTG:0.151, CO:0.137, LHDL:0.049, SD:0.023, DEP:0.022 },
+        integer: { HG:20, HTN:9, HTG:7, CO:6, LHDL:2, SD:1, DEP:1 }
+    }
+};
+const RISK_TEXT = {
+    en: {
+        low: {
+            badge: 'Low Risk',
+            brief: 'Your CANDID Score is in the low-risk range. Based on cohort data, individuals with a similar profile show a low statistical probability of developing type 2 diabetes. Your overall lifestyle habits appear to be in good shape — keep it up.',
+            advice: (pop) => `<p style="margin:0.5rem 0 0.3rem;"><strong>About your score:</strong> Your CircS components — covering metabolic indicators, sleep, and mood — resemble those of lower-risk individuals in the NHANES and CHARLS cohorts. Sustaining your current lifestyle habits is the most important takeaway.</p><p style="margin:0.3rem 0 0.2rem;"><strong>What to keep doing:</strong></p><ul style="margin:0.2rem 0 0.3rem; padding-left:1.2rem;"><li><strong>Sleep:</strong> Aim for 7–9 hours nightly with a consistent schedule. Avoid screens for 30–60 minutes before bed.<sup>[8]</sup></li><li><strong>Diet:</strong> ${pop === 'asian' ? 'Prioritize vegetables (especially dark-leafy varieties), legumes, and lean protein. Replace some white rice with mixed grains (brown rice, oats, millet); aim for vegetables to fill at least half your plate at each meal. Limit sugary beverages and heavily processed foods.<sup>[9,10]</sup>' : 'Prioritize whole foods — vegetables, legumes, whole grains, lean protein, and healthy fats. A Mediterranean-style pattern (olive oil, nuts, fish, abundant vegetables) has consistent evidence for metabolic health. Limit sugary beverages and ultra-processed snacks.<sup>[9,10]</sup>'}</li><li><strong>Exercise:</strong> ≥150 min/week of moderate aerobic activity (brisk walking, cycling, swimming) plus 2×/week resistance training.<sup>[11]</sup></li><li>Avoid smoking; keep alcohol moderate.<sup>[12]</sup></li><li>Annual check-ups including fasting glucose and lipid panel are advisable even at low risk.</li></ul>`
+        },
+        medium: {
+            badge: 'Medium Risk',
+            brief: 'Your CANDID Score is in the medium-risk range. Population data shows that individuals with a similar profile have a statistically higher association with type 2 diabetes — a meaningful prompt to build healthier habits around sleep, diet, and physical activity.',
+            advice: (pop) => `<p style="margin:0.5rem 0 0.3rem;"><strong>About your score:</strong> Your CircS profile shows a moderate accumulation of metabolic and circadian risk factors. In the cohort data underlying this tool, similar profiles were more common among individuals with prevalent type 2 diabetes — but risk factors are modifiable, and evidence from major prevention trials shows that lifestyle changes can meaningfully reduce long-term risk.<sup>[13]</sup></p><p style="margin:0.3rem 0 0.2rem;"><strong>Suggested steps:</strong></p><ul style="margin:0.2rem 0 0.3rem; padding-left:1.2rem;"><li><strong>Sleep:</strong> Set fixed bed and wake times; target 7–8 hours/night. Reduce caffeine after 2 PM and limit evening light exposure. Persistent fatigue or snoring may warrant evaluation for sleep disorders.<sup>[8]</sup></li><li><strong>Diet:</strong> ${pop === 'asian' ? 'Replace at least one-third of refined staples (white rice, white noodles) with whole grains (brown rice, oat congee, mixed-grain rice, whole-wheat noodles). Eat vegetables first at each meal to moderate postprandial glucose rise. Choose steamed, boiled, or lightly stir-fried dishes over deep-fried. Eliminate sugary drinks (milk tea, packaged fruit juice, sodas) and reduce high-sodium condiments and pickled foods.<sup>[9,10]</sup>' : 'Reduce ultra-processed food and fast-food frequency. Use the plate method: half vegetables, quarter lean protein, quarter whole grains. Limit sugary beverages and refined snacks. Moderate alcohol intake.<sup>[9,10]</sup>'}</li><li><strong>Exercise:</strong> Work toward ≥200 min/week of moderate aerobic exercise; add resistance training 2–3×/week to improve insulin sensitivity independent of weight.<sup>[11]</sup></li><li><strong>Weight:</strong> For those who are overweight, a modest 5–7% body weight reduction is associated with improved metabolic markers in prevention trials.<sup>[13]</sup></li><li><strong>Monitoring:</strong> A fasting glucose check every 6–12 months is reasonable; discuss with your physician if multiple risk factors persist.<sup>[10]</sup></li></ul>`
+        },
+        high: {
+            badge: 'High Risk',
+            brief: 'Your CANDID Score is in the high-risk range. Individuals with similar profiles showed a substantially higher prevalence of type 2 diabetes in the cohort data. This is a signal to take proactive steps: adopt healthier lifestyle habits and arrange regular check-ups to monitor key metabolic indicators such as fasting glucose and blood lipids.',
+            advice: (pop) => `<p style="margin:0.5rem 0 0.3rem;"><strong>About your score:</strong> Your CircS profile includes multiple components linked to metabolic and circadian dysregulation. Based on NHANES and CHARLS data, similar profiles are found at substantially higher rates among individuals with prevalent type 2 diabetes. This does not confirm a diagnosis, but suggests that further evaluation and proactive lifestyle change are both worthwhile steps.</p><p style="margin:0.3rem 0 0.2rem;"><strong>Suggested actions:</strong></p><ul style="margin:0.2rem 0 0.3rem; padding-left:1.2rem;"><li><strong>Consider professional evaluation:</strong> A metabolic assessment including fasting glucose and HbA1c can clarify your current status. If prediabetes or diabetes is identified, evidence-based intervention (lifestyle changes, and medication if indicated) can significantly improve long-term outcomes.<sup>[10]</sup></li><li><strong>Sleep:</strong> Prioritize consistent 7–8 hour sleep with fixed timing. If you experience frequent nighttime awakening, loud snoring, or daytime sleepiness, evaluation for obstructive sleep apnea is worthwhile — this condition independently worsens insulin resistance.<sup>[8]</sup></li><li><strong>Diet:</strong> ${pop === 'asian' ? 'Make whole grains the primary staple (brown rice, mixed-grain congee, whole-wheat noodles, oats). Start meals with vegetables and protein before eating starchy foods to help blunt glucose peaks. Choose high-fiber proteins (tofu, fish, eggs, legumes). Eliminate sugary beverages completely (milk tea, canned juices, sodas). Minimize deep-fried and heavily processed dishes; reduce sodium from sauces, pastes, and preserved foods.<sup>[9,10]</sup>' : 'Focus on whole, minimally processed foods. Limit red and processed meats; eliminate sugary beverages; choose whole-grain bread and pasta; increase dietary fiber to ≥30 g/day; follow Mediterranean or DASH patterns; reduce fast food and packaged snack frequency.<sup>[9,10]</sup>'}</li><li><strong>Exercise:</strong> Aim for 200–300 min/week of moderate aerobic activity; if currently sedentary, begin with 15–20 minutes of daily walking and build gradually. Structured resistance training 2–3×/week improves insulin sensitivity beyond weight loss alone.<sup>[11]</sup></li><li><strong>Weight:</strong> For those who are overweight, a 5–15% weight reduction has shown meaningful metabolic benefit in major clinical trials.<sup>[13]</sup></li><li>If sleep deprivation or depressive symptoms are contributing factors, addressing these specifically — in addition to metabolic measures — is likely to be beneficial.<sup>[8]</sup></li></ul>`
+        }
+    },
+    zh: {
+        low: {
+            badge: '低风险',
+            brief: '您的CANDID Score处于低风险区间。基于队列数据，具有类似指标组合的个体发生2型糖尿病的统计概率较低。您当前的整体生活方式状况良好，建议继续保持现有的健康习惯。',
+            advice: (pop) => `<p style="margin:0.5rem 0 0.3rem;"><strong>关于您的评分：</strong>您当前的代谢指标、睡眠状况和情绪状态与低风险人群总体相近。继续保持现有的健康生活习惯，是最重要的建议。</p><p style="margin:0.3rem 0 0.2rem;"><strong>建议保持的习惯：</strong></p><ul style="margin:0.2rem 0 0.3rem; padding-left:1.2rem;"><li><strong>规律睡眠：</strong>每晚保证7–9小时，尽量固定起床和入睡时间；睡前30–60分钟减少电子屏幕使用。<sup>[8]</sup></li><li><strong>饮食：</strong>${pop === 'asian' ? '以天然食材为主，多摄入蔬菜（尤其深色蔬菜如菠菜、油菜、西兰花）、豆类、适量全谷物和优质蛋白，减少含糖饮料和高度加工食品。主食上可适当将部分白米饭替换为杂粮饭（糙米、小米、燕麦等）；每餐蔬菜占餐盘至少一半。<sup>[9,10]</sup>' : '以天然食物为主，多摄入蔬菜、豆类、全谷物、优质蛋白和健康脂肪（如橄榄油、坚果、鱼类）。减少含糖饮料和高度加工食品，可参考地中海饮食模式以维护代谢健康。<sup>[9,10]</sup>'}</li><li><strong>规律运动：</strong>每周≥150分钟中等强度有氧运动（如快走、骑自行车、游泳），加上每周2次抗阻训练。<sup>[11]</sup></li><li>不吸烟，适量饮酒。<sup>[12]</sup></li><li>建议每年进行一次健康体检，包括空腹血糖和血脂检查，即使处于低风险也有助于早期发现变化。</li></ul>`
+        },
+        medium: {
+            badge: '中风险',
+            brief: '您的CANDID Score处于中风险区间。人群数据显示，具有类似指标组合的人群，2型糖尿病的统计发生率高于低风险人群——这提示我们有必要在睡眠、饮食和运动等方面养成更健康的生活习惯。',
+            advice: (pop) => `<p style="margin:0.5rem 0 0.3rem;"><strong>关于您的评分：</strong>您的多项CircS指标提示存在一定程度的代谢和昼夜节律紊乱。在本工具所基于的队列研究中，类似指标谱的人群中2型糖尿病患病率相对偏高。但请注意：风险因素大多可通过生活方式改变来改善，多项大型预防研究已证实，适度的生活方式调整可显著减少糖尿病的发生概率。<sup>[13]</sup></p><p style="margin:0.3rem 0 0.2rem;"><strong>建议采取的措施：</strong></p><ul style="margin:0.2rem 0 0.3rem; padding-left:1.2rem;"><li><strong>改善睡眠：</strong>建立固定的起床和入睡时间，每晚目标7–8小时；下午2点后减少咖啡因摄入；睡前减少强光和屏幕暴露。若有白天疲倦或打鼾，建议进一步评估是否存在睡眠障碍。<sup>[8]</sup></li><li><strong>饮食调整：</strong>${pop === 'asian' ? '将至少三分之一的精白主食（白米饭、白面条）替换为全谷物（糙米饭、杂粮粥、全麦面、燕麦）。每餐先吃蔬菜，有助于平缓餐后血糖波动。蛋白质优先选择豆腐、鱼肉、鸡蛋、豆类等。减少含糖饮料（奶茶、包装果汁、碳酸饮料），减少腌制食品和重口味酱料。烹饪方式以蒸、煮、少油炒为主，减少油炸。<sup>[9,10]</sup>' : '减少高度加工食品和快餐的频率。采用餐盘法：一半蔬菜、四分之一优质蛋白、四分之一全谷物。限制含糖饮料和精制零食，适度饮酒。<sup>[9,10]</sup>'}</li><li><strong>增加运动：</strong>每周≥200分钟中等强度有氧运动，加上每周2–3次抗阻训练（如深蹲、弹力带训练），可独立于体重变化改善胰岛素敏感性。<sup>[11]</sup></li><li><strong>体重管理：</strong>若存在超重，减重5–7%在大型研究中被证实可带来明显的代谢指标改善。<sup>[13]</sup></li><li><strong>定期监测：</strong>建议每6–12个月检测空腹血糖；若多项风险因素持续存在，可与医生商讨是否需要进一步代谢评估。<sup>[10]</sup></li></ul>`
+        },
+        high: {
+            badge: '高风险',
+            brief: '您的CANDID Score处于高风险区间。队列数据显示，具有类似指标组合的人群中，2型糖尿病患病率明显偏高。这是积极行动的信号：在调整生活方式的同时，建议定期体检，监测空腹血糖、血脂等关键代谢指标，确认各项指标处于正常范围。',
+            advice: (pop) => `<p style="margin:0.5rem 0 0.3rem;"><strong>关于您的评分：</strong>您的CircS指标谱显示多项代谢与昼夜节律相关成分同时存在。基于NHANES和CHARLS队列数据，具有类似指标组合的人群中2型糖尿病患病率明显升高。这不等于已确诊，但提示进一步评估和生活方式调整是有意义的主动选择。</p><p style="margin:0.3rem 0 0.2rem;"><strong>建议采取的行动：</strong></p><ul style="margin:0.2rem 0 0.3rem; padding-left:1.2rem;"><li><strong>考虑进行专业评估：</strong>空腹血糖和糖化血红蛋白（HbA1c）检测可明确当前代谢状态。若发现糖尿病前期或糖尿病，基于循证的干预措施（生活方式调整，必要时配合药物）可显著改善长期预后。<sup>[10]</sup></li><li><strong>睡眠与昼夜节律：</strong>建立每晚7–8小时、时间固定的睡眠习惯；睡前1小时减少电子屏幕使用。若有频繁夜醒、明显打鼾或白天嗜睡，建议评估阻塞性睡眠呼吸暂停——该病可独立加重胰岛素抵抗。<sup>[8]</sup></li><li><strong>饮食调整（重点）：</strong>${pop === 'asian' ? '以全谷物为主要主食（糙米、杂粮粥、全麦面、燕麦）；进餐时先吃蔬菜和蛋白质，后吃主食，有助于减缓血糖升高速度。优先选择高纤维蛋白来源（豆腐、鱼、蛋、豆类）。彻底减少含糖饮料（奶茶、果汁、含糖苏打）；大幅减少油炸和高度加工食品；控制来自酱油、酱料、腌制品的钠盐摄入。<sup>[9,10]</sup>' : '以天然、低加工食物为主。限制红肉和加工肉类；彻底减少含糖饮料；选择全麦面包和全麦意面；膳食纤维摄入≥30克/天；参考地中海饮食或DASH饮食模式；减少快餐和包装零食频率。<sup>[9,10]</sup>'}</li><li><strong>规律运动：</strong>每周200–300分钟中等强度有氧运动；若目前运动量较少，可从每天步行15–20分钟开始，逐步增加。每周2–3次抗阻训练，可独立于体重变化改善胰岛素敏感性。<sup>[11]</sup></li><li><strong>体重管理：</strong>超重或肥胖者减重5–15%，在多项大型临床研究中已证实具有明显的代谢改善效果。<sup>[13]</sup></li><li>若睡眠剥夺或抑郁症状是您的CircS相关成分，针对性地改善这些问题，与代谢指标的管理同样值得重视。<sup>[8]</sup></li></ul>`
+        }
+    }
+};
+const PHQ9_EN = [
+    'Little interest or pleasure in doing things',
+    'Feeling down, depressed, or hopeless',
+    'Trouble falling or staying asleep, or sleeping too much',
+    'Feeling tired or having little energy',
+    'Poor appetite or overeating',
+    'Feeling bad about yourself — or that you are a failure or have let yourself or your family down',
+    'Trouble concentrating on things, such as reading the newspaper or watching television',
+    'Moving or speaking so slowly that other people could have noticed. Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual',
+    'Thoughts that you would be better off dead, or of hurting yourself in some way'
+];
+const PHQ9_ZH = [
+    '做事提不起兴趣或没有乐趣',
+    '感到心情低落、沮丧或绝望',
+    '入睡困难、睡不安稳或睡眠过多',
+    '感觉疲倦或没有精力',
+    '食欲不振或暴饮暴食',
+    '觉得自己很糟糕——或者觉得自己失败了，或者让自己或家人失望了',
+    '难以集中注意力，比如看报纸或看电视时',
+    '动作或说话缓慢到别人能注意到的程度，或者恰恰相反——比平时更烦躁不安，坐立不安',
+    '有不如死掉或伤害自己的想法'
+];
+const CESD10_EN = [
+    "I was bothered by things that usually don't bother me",
+    'I had trouble keeping my mind on what I was doing',
+    'I felt depressed',
+    'I felt everything I did was an effort',
+    'I felt hopeful about the future',
+    'I felt fearful',
+    'My sleep was restless',
+    'I was happy',
+    'I felt lonely',
+    'I could not get going'
+];
+const CESD10_ZH = [
+    '我被平时不会困扰我的事情困扰',
+    '我难以集中注意力',
+    '我感到沮丧',
+    '我感觉做什么事都很吃力',
+    '我对未来充满希望',
+    '我感到害怕',
+    '我的睡眠不安稳',
+    '我很快乐',
+    '我感到孤独',
+    '我无法振作起来'
+];
+function openDepressionQuestionnaire() {
+    if (!population) {
+        alert(currentLang === 'zh' ? '请先在第一步选择人群。' : 'Please select a population in Step 1 first.');
+        return;
+    }
+    const cutoff = CUTOFFS[population];
+    const modalBody = document.getElementById('modal-body');
+    const modalTitle = document.getElementById('modal-title');
+    const isPHQ9 = cutoff.depression_scale === 'PHQ-9';
+    if (isPHQ9) {
+        const questions = currentLang === 'zh' ? PHQ9_ZH : PHQ9_EN;
+        modalTitle.textContent = 'PHQ-9 Depression Scale';
+        const opts0 = currentLang === 'zh' ? ['完全没有','有几天','超过一半天数','几乎每天'] : ['Not at all','Several days','>Half days','Nearly every day'];
+        modalBody.innerHTML = '<div class="info-box"><p>' + (currentLang === 'zh' ? '在过去2周内，您被以下问题困扰的频率如何？' : 'Over the last 2 weeks, how often have you been bothered by the following?') + '</p></div><div id="questionnaire-container">' +
+            questions.map((q, i) => '<div class="question-item"><div class="question-text">' + (i+1) + '. ' + q + '</div><div class="question-options">' +
+            opts0.map((o, v) => '<label class="option-label"><input type="radio" name="phq9_' + i + '" value="' + v + '" ' + (v===0?'checked':'') + ' onchange="calcDepScore()"> ' + o + '</label>').join('') +
+            '</div></div>').join('') +
+            '</div><div style="margin-top:1rem; padding:1rem; background:#f8f9fa; border-radius:6px;"><p><strong>' + (currentLang==='zh'?'得分':'Score') + ': <span id="depScoreDisplay">0</span></strong></p></div><div style="margin-top:1.5rem; text-align:center;"><button class="btn btn-primary" onclick="submitDepScore()">' + (currentLang==='zh'?'确认得分':'Confirm Score') + '</button></div>';
+    } else {
+        const questions = currentLang === 'zh' ? CESD10_ZH : CESD10_EN;
+        modalTitle.textContent = 'CES-D-10 Depression Scale';
+        const opts0 = currentLang === 'zh' ? ['几乎没有','有时','偶尔','大部分时间','所有时间'] : ['Rarely','Sometimes','Occasionally','Most of time','All the time'];
+        const opts0r = currentLang === 'zh' ? ['所有时间','大部分时间','偶尔','有时','几乎没有'] : ['All the time','Most of time','Occasionally','Sometimes','Rarely'];
+        modalBody.innerHTML = '<div class="info-box"><p>' + (currentLang === 'zh' ? '在过去一周内，您有以下感受的频率？' : 'During the past week, how often did you feel this way?') + '</p></div><div id="questionnaire-container">' +
+            questions.map((q, i) => {
+                const isReverse = [4, 7].includes(i);
+                const opts = isReverse ? opts0r : opts0;
+                return '<div class="question-item"><div class="question-text">' + (i+1) + '. ' + q + '</div><div class="question-options">' +
+                opts.map((o, v) => '<label class="option-label"><input type="radio" name="cesd_' + i + '" value="' + v + '" ' + (v===0?'checked':'') + ' onchange="calcDepScore()"> ' + o + '</label>').join('') +
+                '</div></div>';
+            }).join('') +
+            '</div><div style="margin-top:1rem; padding:1rem; background:#f8f9fa; border-radius:6px;"><p><strong>' + (currentLang==='zh'?'得分':'Score') + ': <span id="depScoreDisplay">0</span></strong></p></div><div style="margin-top:1.5rem; text-align:center;"><button class="btn btn-primary" onclick="submitDepScore()">' + (currentLang==='zh'?'确认得分':'Confirm Score') + '</button></div>';
+    }
+    document.getElementById('depressionModal').classList.add('show');
+}
+function calcDepScore() {
+    const cutoff = CUTOFFS[population];
+    const isPHQ9 = cutoff.depression_scale === 'PHQ-9';
+    let score = 0;
+    if (isPHQ9) {
+        for (let i = 0; i < 9; i++) {
+            const checked = document.querySelector('input[name="phq9_' + i + '"]:checked');
+            if (checked) score += parseInt(checked.value);
+        }
+    } else {
+        for (let i = 0; i < 10; i++) {
+            const checked = document.querySelector('input[name="cesd_' + i + '"]:checked');
+            if (checked) score += parseInt(checked.value);
+        }
+    }
+    document.getElementById('depScoreDisplay').textContent = score;
+}
+function submitDepScore() {
+    const cutoff = CUTOFFS[population];
+    const score = parseInt(document.getElementById('depScoreDisplay').textContent) || 0;
+    window.depScore = score;
+    window.depPositive = score > cutoff.depression_positive;
+    closeDepressionQuestionnaire();
+}
+function closeDepressionQuestionnaire() {
+    document.getElementById('depressionModal').classList.remove('show');
+}
+function validateStep2() {
+    const fields = ['fbg','tg','hdl','wc','sbp','dbp','sleep'];
+    const labels = {
+        fbg: currentLang==='zh'?'空腹血糖':'Fasting Blood Glucose',
+        tg: currentLang==='zh'?'甘油三酯':'Triglycerides',
+        hdl: currentLang==='zh'?'HDL-C':'HDL Cholesterol',
+        wc: currentLang==='zh'?'腰围':'Waist Circumference',
+        sbp: currentLang==='zh'?'收缩压':'Systolic BP',
+        dbp: currentLang==='zh'?'舒张压':'Diastolic BP',
+        sleep: currentLang==='zh'?'睡眠时长':'Sleep Duration'
+    };
+    const errors = [];
+    fields.forEach(f => {
+        const el = document.getElementById(f);
+        const errEl = document.getElementById(f + '-error');
+        el.classList.remove('error');
+        if (errEl) errEl.style.display = 'none';
+        if (!el.value || el.value.trim() === '') {
+            el.classList.add('error');
+            if (errEl) { errEl.textContent = currentLang==='zh'?'此字段为必填项':'This field is required'; errEl.style.display = 'block'; }
+            errors.push(labels[f]);
+        } else if (isNaN(parseFloat(el.value))) {
+            el.classList.add('error');
+            if (errEl) { errEl.textContent = currentLang==='zh'?'请输入有效数字':'Please enter a valid number'; errEl.style.display = 'block'; }
+            errors.push(labels[f]);
+        }
+    });
+    if (!window.depScore && window.depScore !== 0) {
+        const depErrEl = document.getElementById('dep-error');
+        if (depErrEl) { depErrEl.textContent = currentLang==='zh'?'请填写抑郁量表':'Please complete the depression questionnaire'; depErrEl.style.display = 'block'; }
+        errors.push(currentLang==='zh'?'抑郁筛查':'Depression Screening');
+    }
+    const vErrEl = document.getElementById('validation-errors');
+    const listEl = document.getElementById('error-list');
+    if (errors.length > 0) {
+        if (listEl) {
+            listEl.innerHTML = errors.map(e => '<li>' + e + '</li>').join('');
+        }
+        if (vErrEl) vErrEl.style.display = 'block';
+        return false;
+    } else {
+        if (vErrEl) vErrEl.style.display = 'none';
+        return true;
+    }
+}
+function calculateScore() {
+    if (!validateStep2()) return;
+    const cutoff = CUTOFFS[population];
+    const fbgUnit = lastUnit['fbg'];
+    const tgUnit = lastUnit['tg'];
+    const hdlUnit = lastUnit['hdl'];
+    const wcVal = parseFloat(document.getElementById('wc').value);
+    const fbg = fbgUnit === 'mgdl' ? parseFloat(document.getElementById('fbg').value) : parseFloat(document.getElementById('fbg').value) * 18.0182;
+    const tg = tgUnit === 'mgdl' ? parseFloat(document.getElementById('tg').value) : parseFloat(document.getElementById('tg').value) * 88.545;
+    const hdl = hdlUnit === 'mgdl' ? parseFloat(document.getElementById('hdl').value) : parseFloat(document.getElementById('hdl').value) * 38.67;
+    const sbpVal = parseFloat(document.getElementById('sbp').value);
+    const dbpVal = parseFloat(document.getElementById('dbp').value);
+    const sbp = lastUnit['sbp'] === 'kpa' ? sbpVal / 0.133322 : sbpVal;
+    const dbp = lastUnit['dbp'] === 'kpa' ? dbpVal / 0.133322 : dbpVal;
+    const diabetesMed = document.getElementById('diabetes-med').value === 'yes';
+    const antihypertensiveMed = document.getElementById('antihypertensive-med').value === 'yes';
+    const lipidMed = document.getElementById('lipid-med').value === 'yes';
+    const wcThreshold = gender === 'male' ? cutoff.wc_male : cutoff.wc_female;
+    const wcCM = lastUnit['wc'] === 'in' ? wcVal * 2.54 : wcVal;
+    const HG = fbg >= 100 || diabetesMed;
+    const HTN = sbp >= 130 || dbp >= 85 || antihypertensiveMed;
+    const HTG = tg >= 150 || lipidMed;
+    const CO = wcCM >= wcThreshold;
+    const LHDL = hdl < (gender === 'male' ? cutoff.hdl_male : cutoff.hdl_female) || lipidMed;
+    const SD = parseInt(document.getElementById('sleep').value) <= 7;
+    const DEP = window.depPositive;
+    const components = { HG, HTN, HTG, CO, LHDL, SD, DEP };
+    const weights = cutoff.weights;
+    const integer = cutoff.integer;
+    const weightedScore = (HG?weights.HG:0) + (HTN?weights.HTN:0) + (HTG?weights.HTG:0) + (CO?weights.CO:0) + (LHDL?weights.LHDL:0) + (SD?weights.SD:0) + (DEP?weights.DEP:0);
+    const integerScore = (HG?integer.HG:0) + (HTN?integer.HTN:0) + (HTG?integer.HTG:0) + (CO?integer.CO:0) + (LHDL?integer.LHDL:0) + (SD?integer.SD:0) + (DEP?integer.DEP:0);
+    const riskKey = integerScore <= 16 ? 'low' : integerScore <= 34 ? 'medium' : 'high';
+    window.lastRiskKey = riskKey;
+    const riskClassMap = { low: 'low', medium: 'medium', high: 'high' };
+    const riskTexts = RISK_TEXT[currentLang][riskKey];
+    document.getElementById('weighted-score').textContent = weightedScore.toFixed(3);
+    document.getElementById('integer-score').textContent = integerScore;
+    const badge = document.getElementById('risk-badge');
+    badge.textContent = riskTexts.badge;
+    badge.className = 'risk-badge ' + riskClassMap[riskKey];
+    document.getElementById('advice-brief').textContent = riskTexts.brief;
+    document.getElementById('advice-full').innerHTML = riskTexts.advice(population);
+    const isZH = currentLang === 'zh';
+    const posText = isZH ? '✓ 阳性' : '✓ Positive';
+    const negText = isZH ? '○ 阴性' : '○ Negative';
+    const medText = isZH ? '（用药）' : ' (Medication)';
+    const displayVals = {
+        fbg: fbg.toFixed(1) + ' mg/dL' + (diabetesMed ? medText : ''),
+        tg: tg.toFixed(1) + ' mg/dL' + (lipidMed ? medText : ''),
+        hdl: hdl.toFixed(1) + ' mg/dL' + (lipidMed ? medText : ''),
+        wc: wcCM.toFixed(1) + ' cm',
+        sbp: sbp.toFixed(0) + ' mmHg' + (antihypertensiveMed ? medText : ''),
+        dbp: dbp.toFixed(0) + ' mmHg'
+    };
+    const row = (label, val, pos, pts) => '<tr><td>' + label + '</td><td>' + val + '</td><td style="color:' + (pos?'var(--risk-red)':'var(--risk-green)') + '; font-weight:600;">' + (pos ? posText : negText) + '</td><td>' + pts + '</td></tr>';
+    document.getElementById('indicators-tbody').innerHTML =
+        row('HG – ' + (isZH?'高血糖':'Hyperglycemia'), displayVals.fbg, HG, HG * integer.HG) +
+        row('HTN – ' + (isZH?'高血压':'Hypertension'), displayVals.sbp + ' / ' + displayVals.dbp, HTN, HTN * integer.HTN) +
+        row('HTG – ' + (isZH?'高甘油三酯':'Hypertriglyceridemia'), displayVals.tg, HTG, HTG * integer.HTG) +
+        row('CO – ' + (isZH?'腹型肥胖':'Central Obesity'), displayVals.wc, CO, CO * integer.CO) +
+        row('LHDL – ' + (isZH?'低HDL-C':'Low HDL-C'), displayVals.hdl, LHDL, LHDL * integer.LHDL) +
+        row('SD – ' + (isZH?'睡眠剥夺':'Sleep Deprivation'), document.getElementById('sleep').options[document.getElementById('sleep').selectedIndex].text, SD, SD * integer.SD) +
+        row('DEP – ' + (isZH?'抑郁筛查':'Depression'), (window.depScore || 0) + ' (' + cutoff.depression_scale + ')', DEP, DEP * integer.DEP);
+    goToStep(3);
+}
+</script>
+</body>
+</html>
